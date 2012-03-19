@@ -13,40 +13,37 @@ import dao.WardID;
 import dao.WardIdDAO;
 import dao.WardUser;
 import dao.Candidate;
-//import dao.CandidateDAO;
+import dao.CandidateDAO;
 
 public class CandidateServ {
 
-	//CandidateDAO dao;
-	Candidate CandidateId;
+	CandidateDAO dao;
+	Candidate candidateId;
 		//send request to field officer
 		//send request to listed candidates
 		//send request to party
 	
 	
 	public Candidate getCandidate(){
-		return this.CandidateId;
+		return this.candidateId;
 	}
 	public boolean getCandidateId(String candidateId){
 
-		/*if(dao!=null)
+		if(dao!=null)
 		{
 			this.candidateId = dao.getCandidateId(candidateId);
 			return true;
-		}*/
+		}
 		return false;
 	}
-	public boolean getCandidateIdByUser(String candidateId){
-		/*if(dao!=null)
-		 * {
-		 *		this.candidateId = dao.getCandidateIdByUser(id);
-		 * }
-		 */
+	public boolean getCandidateIdByUser(String candidateId){ 
+		this.candidateId = dao.getCandidateIdByUser(candidateId);
+		if(candidateId!=null)
+			return true;
+		return false;
+	}
+	public boolean writeCandidature(){
 		
-		return false;
-	}
-	public boolean writeCandidate(){
-	
 		return false;
 	}
 }

@@ -1,5 +1,8 @@
 package dao;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -126,6 +129,53 @@ public class VoterIdDAO extends BaseHibernate {
 		}catch(HibernateException e)
 		{
 			System.err.println("Error: at VoterIdDAO function: createVoterId()");
+			if(trans!=null)
+				trans.rollback();
+		}finally
+		{
+			if(session!=null)
+				session.close();
+		}
+		return false;
+	}
+	
+	public boolean approveVoterId(String voterid,Long reqid,String warduser)
+	{
+		Session session=null;
+		Transaction trans = null;
+		Request req = null;
+		VoterId votecard = null;
+		try
+		{
+			session = getSessionFactory().openSession();
+			trans = session.beginTransaction();
+			RequestDAO r = new RequestDAO();
+			r.setSessionFactory(getSessionFactory());
+			req = r.getRequest(reqid);
+			if(req==null)
+				throw new Exception("Cannot find the desired request");
+			if(req.getReqstatus()!=Request.UNVERIFIED)
+				throw new Exception("The desired request is served.");
+			req.setReqstatus(Request.ACCEPTED);
+			req.setReqServ(new Timestamp(new Date().getTime()));
+			session.update(req);
+			votecard = getVoterId(voterid);
+			if(votecard==null)
+				throw new Exception("The requested voterid doesnt exist.");
+			votecard.setValidity(VoterId.ACCEPTED);
+			votecard.setValidatedBy(warduser);
+			votecard.setEffectiveFrom(new Timestamp(new Date().getTime()));
+			session.update(voterid);
+			trans.commit();
+			return true;
+		}catch(HibernateException e)
+		{
+			System.err.println("Error: at VoterIdDAO function: approveVoterId()");
+			if(trans!=null)
+				trans.rollback();
+		}catch(Exception e)
+		{
+			System.err.println("Error: at VoterIdDAO function: approveVoterId()");
 			if(trans!=null)
 				trans.rollback();
 		}finally

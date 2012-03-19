@@ -11,7 +11,10 @@ public class Request {
 	Timestamp reqTime;
 	Timestamp reqServ;
 	String id;
-	
+	public static final String VERIFIED = "verified"; 
+	public static final String UNVERIFIED = "unverified"; 
+	public static final String ACCEPTED = "accepted"; 
+	public static final String REJECTED = "rejected";
 	
 	public Request(String reqtype, String reqquestion, String reqstatus,
 			Timestamp reqTime, Timestamp reqServ, String id) {

@@ -83,7 +83,7 @@ public class VoterIdServ {
 		wardid = new WardID(currState,currCity,currWardNo);
 		voterid = new VoterId(id,name,surName,fathersName,sex,dob,pobAdd,currAdd,currState,currCity,currWardNo,null,
 		null,null,relId,wardid.getWardId(),VoterId.NOTVALIDATED);
-		request = new Request("voterid","Verify the details of the voterId: ","unverified",new Timestamp(new Date().getTime()),null,null);
+		request = new Request("voterid","Verify the details of the voterId: ",Request.UNVERIFIED,new Timestamp(new Date().getTime()),null,null);
 		req4voterid = new RequestForVoterId(null,null);
 		warduser = new WardUser(null,null);
 		if(dao.writeVoterId(voterid, wardid, content, file, request, req4voterid, warduser))

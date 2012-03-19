@@ -17,7 +17,7 @@ import dao.FileInfo;
 import dao.User;
 
 public class CandidateReg extends BaseAction{
-
+	
 	@Override
 	public String execute() throws Exception {
 		if(req.getSession(false)!=null)
