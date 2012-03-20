@@ -29,17 +29,22 @@
 				<div class = "votercard_property"><span class="votercard_label">Father's name: </span><span class="votercard_value">${requestScope.votercard.fathersName}</span></div>
 					<div class = "votercard_property"><span class="votercard_label">Rel Id: </span><span class="votercard_value">${requestScope.votercard.relID}</span></div>
 				</div>
+				<div class="votercard_property"><span class="votercard_label">Status: </span><span class="votercard_value"><c:if test="${requestScope.votercard.validity eq 2 }">Accepted</c:if><c:if test="${requestScope.votercard.validity eq 3 }">Rejected</c:if><c:if test="${requestScope.votercard.validity eq 0 }">Not validated</c:if></span>
+				</div>
 			</div>
-			<form>
+			<c:if test="${requestScope.votercard.validity eq 0}">
+			<form action="verifyVoterIdStatus.action" method="post">
+				<input type="hidden" id="reqid" name="reqid" value="${param.reqid}" />
+				<input type="hidden" id="voterid" name="voterid" value="${param.voterid}" />
 				<table class="verifyblock">
 				<tr>
 				<td><span class="accept">Accept</span></td>
-				<td><input type="radio" value="accept" name="status" /></td>
+				<td><input type="radio" value="accept" id="status" name="status" /></td>
 				<td><span class="reject">Reject</span></td>
-				<td><input type="radio" value="reject" name="status" /></td>
+				<td><input type="radio" value="reject" id="status" name="status" /></td>
 				<td><input type="submit" value="OK" /></td>
 				</tr>
 				</table>
-				
 			</form>
+			</c:if>
 </c:if>

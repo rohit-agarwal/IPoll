@@ -80,7 +80,38 @@ public class FileDAO extends BaseHibernate {
 		}
 		return false;
 	}
-	
+	public boolean deleteFile(String fileId,String id)
+	{
+		Session session =null;
+		Transaction trans = null;
+		FileInfo f = null;
+		FileContent fc = null;
+		try
+		{
+			if(fileId==null)
+				return false;
+			f = getFileInfo(fileId);
+			fc = getFileContent(fileId);
+			if(f.getUploadedBy().compareToIgnoreCase(id)!=0)
+				return false;
+			session = getSessionFactory().openSession();
+			trans = session.beginTransaction();
+			session.delete(fc);
+			session.delete(f);
+			trans.commit();
+		}catch(HibernateException e)
+		{
+			if(trans!=null)
+				trans.rollback();
+			System.err.println("Error: FileDAO method: writeFileContent()");
+		}
+		finally
+		{
+			if(session!=null)
+				session.close();
+		}
+		return false;
+	}
 	public boolean writeFileContent(FileContent file)
 	{
 		Session session =null;

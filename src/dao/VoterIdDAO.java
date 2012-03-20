@@ -114,7 +114,67 @@ public class VoterIdDAO extends BaseHibernate {
 		
 		return votercard;
 	}
-	
+	public boolean updateVoterIdPhoto(VoterId voterid,FileInfo file,FileContent content)
+	{
+		Session session=null;
+		Transaction trans = null;
+		FileInfo f = null;
+		FileContent fc = null;
+		try
+		{
+			if(voterid==null)
+				return false;
+			FileDAO fd = new FileDAO();
+			fd.setSessionFactory(getSessionFactory());
+			f = fd.getFileInfo(voterid.imageFileId);
+			fc = fd.getFileContent(voterid.imageFileId);
+			if(f.getUploadedBy().compareToIgnoreCase(voterid.getId())!=0)
+				return false;
+			session = getSessionFactory().openSession();
+			trans = session.beginTransaction();
+			session.delete(fc);
+			session.delete(f);
+			session.save(file);
+			content.setFileId(file.getFileId());
+			session.save(content);
+			voterid.setImageFileId(file.getFileId());
+			session.update(voterid);
+			trans.commit();
+		}catch(HibernateException e)
+		{
+			System.err.println("Error: at VoterIdDAO function: updateVoterId()");
+			if(trans!=null)
+				trans.rollback();
+		}finally
+		{
+			if(session!=null)
+				session.close();
+		}
+		return false;
+	}
+	public boolean updateVoterId(VoterId voterid)
+	{
+		Session session=null;
+		Transaction trans = null;
+		try
+		{
+			session = getSessionFactory().openSession();
+			trans = session.beginTransaction();
+			session.update(voterid);
+			trans.commit();
+			return true;
+		}catch(HibernateException e)
+		{
+			System.err.println("Error: at VoterIdDAO function: updateVoterId()");
+			if(trans!=null)
+				trans.rollback();
+		}finally
+		{
+			if(session!=null)
+				session.close();
+		}
+		return false;
+	}
 	public boolean createVoterId(VoterId voterid)
 	{
 		Session session=null;
@@ -154,7 +214,7 @@ public class VoterIdDAO extends BaseHibernate {
 			req = r.getRequest(reqid);
 			if(req==null)
 				throw new Exception("Cannot find the desired request");
-			if(req.getReqstatus()!=Request.UNVERIFIED)
+			if(req.getReqstatus().compareToIgnoreCase(Request.UNVERIFIED)!=0)
 				throw new Exception("The desired request is served.");
 			req.setReqstatus(Request.ACCEPTED);
 			req.setReqServ(new Timestamp(new Date().getTime()));
@@ -165,17 +225,64 @@ public class VoterIdDAO extends BaseHibernate {
 			votecard.setValidity(VoterId.ACCEPTED);
 			votecard.setValidatedBy(warduser);
 			votecard.setEffectiveFrom(new Timestamp(new Date().getTime()));
-			session.update(voterid);
+			session.update(votecard);
 			trans.commit();
 			return true;
 		}catch(HibernateException e)
 		{
 			System.err.println("Error: at VoterIdDAO function: approveVoterId()");
+			e.printStackTrace();
 			if(trans!=null)
 				trans.rollback();
 		}catch(Exception e)
 		{
 			System.err.println("Error: at VoterIdDAO function: approveVoterId()");
+			if(trans!=null)
+				trans.rollback();
+		}finally
+		{
+			if(session!=null)
+				session.close();
+		}
+		return false;
+	}
+	public boolean rejectVoterId(String voterid,Long reqid,String warduser)
+	{
+		Session session=null;
+		Transaction trans = null;
+		Request req = null;
+		VoterId votecard = null;
+		try
+		{
+			session = getSessionFactory().openSession();
+			trans = session.beginTransaction();
+			RequestDAO r = new RequestDAO();
+			r.setSessionFactory(getSessionFactory());
+			req = r.getRequest(reqid);
+			if(req==null)
+				throw new Exception("Cannot find the desired request");
+			if(req.getReqstatus().compareToIgnoreCase(Request.UNVERIFIED)!=0)
+				throw new Exception("The desired request is served.");
+			req.setReqstatus(Request.REJECTED);
+			req.setReqServ(new Timestamp(new Date().getTime()));
+			session.update(req);
+			votecard = getVoterId(voterid);
+			if(votecard==null)
+				throw new Exception("The requested voterid doesnt exist.");
+			votecard.setValidity(VoterId.REJECTED);
+			votecard.setValidatedBy(warduser);
+			votecard.setEffectiveFrom(new Timestamp(new Date().getTime()));
+			session.update(votecard);
+			trans.commit();
+			return true;
+		}catch(HibernateException e)
+		{
+			System.err.println("Error: at VoterIdDAO function: rejectVoterId()");
+			if(trans!=null)
+				trans.rollback();
+		}catch(Exception e)
+		{
+			System.err.println("Error: at VoterIdDAO function: rejectVoterId()");
 			if(trans!=null)
 				trans.rollback();
 		}finally

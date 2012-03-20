@@ -41,7 +41,7 @@ public String execute() throws Exception {
 	req.setAttribute("msg", "Error: the values entered <br> in the form are <b>incorrect</b>.");
 	if((user!=null&&password!=null&&conPassword!=null&&email!=null&language!=null)&&password.equals(conPassword))
 	{
-		User us = new User(user,password,"Normal",language,new Timestamp(new Date().getTime()),new Timestamp(new Date().getTime()),email);
+		User us = new User(user,password,User.NORMAL,language,new Timestamp(new Date().getTime()),new Timestamp(new Date().getTime()),email);
 		us.setValidity(1);
 		if(serv.writeUser(us))
 			return "done";

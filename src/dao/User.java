@@ -11,8 +11,9 @@ public class User {
 	private Timestamp lastLogin;
 	private String email;
 	private Integer validity;
-	
-	
+	public static final String ADMIN = "Admin";
+	public static final String WARDUSER = "WardUser";
+	public static final String NORMAL = "Normal";
 	/**
 	 * @return the validity
 	 */

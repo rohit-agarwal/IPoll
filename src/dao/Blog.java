@@ -6,7 +6,16 @@ public class Blog {
 	private String blog_id;
 	private String title;
 	private String post;
+	private String user;
 	private Timestamp date;
+	private long views;
+	
+	public long getViews() {
+		return views;
+	}
+	public void setViews(long views) {
+		this.views = views;
+	}
 	public String getBlog_id() {
 		return blog_id;
 	}

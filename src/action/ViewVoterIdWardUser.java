@@ -58,7 +58,7 @@ public class ViewVoterIdWardUser extends BaseAction {
 				if(req.getSession(false).getAttribute("user") instanceof User)
 				{
 					User user = (User)req.getSession(false).getAttribute("user");
-					if(user.getType().equalsIgnoreCase("warduser")||user.getType().equalsIgnoreCase("admin"))
+					if(user.getType().equalsIgnoreCase(User.WARDUSER)||user.getType().equalsIgnoreCase(User.ADMIN))
 					{
 						if(user.getType().equalsIgnoreCase("warduser"))
 						{

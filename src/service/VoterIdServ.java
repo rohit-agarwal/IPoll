@@ -122,4 +122,62 @@ public class VoterIdServ {
 	{
 		return voterid;
 	}
+	
+	public boolean acceptVoterId(String voterid,Long reqid,String id)
+	{
+		if(dao.approveVoterId(voterid, reqid, id))
+		{
+			this.voterid = dao.getVoterId(voterid);
+			return true;
+		}
+		
+		return false;
+	}
+	public boolean rejectVoterId(String voterid,Long reqid,String id)
+	{
+		if(dao.rejectVoterId(voterid, reqid, id))
+		{
+			this.voterid = dao.getVoterId(voterid);
+			return true;
+		}
+		return false;
+	}
+	public boolean updateVoterIdNoImage(String name,String surName,String currAdd,String currState,String currCity,
+			String currWardNo,Timestamp dob,Blob userImage,String pobAdd,String id,String fathersName,String sex,
+			String relId,String voterID)
+	{
+		if(dao.getVoterIdByUser(id)!=null)
+		{
+			wardid = new WardID(currState,currCity,currWardNo);
+			voterid = new VoterId(id,name,surName,fathersName,sex,dob,pobAdd,currAdd,currState,currCity,currWardNo,null,
+			null,null,relId,wardid.getWardId(),VoterId.NOTVALIDATED);
+			voterid.setVoterID(voterID);
+			request = new Request("voterid","Verify the details of the voterId: ",Request.UNVERIFIED,new Timestamp(new Date().getTime()),null,null);
+			req4voterid = new RequestForVoterId(null,null);
+			warduser = new WardUser(null,null);
+			if(dao.writeVoterId(voterid, wardid, content, file, request, req4voterid, warduser))
+				return true;
+		}
+		return false;
+	}
+	public boolean updateVoterId(String name,String surName,String currAdd,String currState,String currCity,
+			String currWardNo,Timestamp dob,Blob userImage,String pobAdd,String id,String fathersName,String sex,
+			String relId,String userImageContentType,String userImageFileName,String voterID)
+	{
+		if(dao.getVoterIdByUser(id)!=null)
+		{
+			file = new FileInfo(userImageFileName,userImageContentType,id);
+			content = new FileContent(null,userImage);
+			wardid = new WardID(currState,currCity,currWardNo);
+			voterid = new VoterId(id,name,surName,fathersName,sex,dob,pobAdd,currAdd,currState,currCity,currWardNo,null,
+			null,null,relId,wardid.getWardId(),VoterId.NOTVALIDATED);
+			voterid.setVoterID(voterID);
+			request = new Request("voterid","Verify the details of the voterId: ",Request.UNVERIFIED,new Timestamp(new Date().getTime()),null,null);
+			req4voterid = new RequestForVoterId(null,null);
+			warduser = new WardUser(null,null);
+			if(dao.writeVoterId(voterid, wardid, content, file, request, req4voterid, warduser))
+				return true;
+		}
+		return false;
+	}
 }

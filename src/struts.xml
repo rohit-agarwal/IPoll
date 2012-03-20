@@ -29,6 +29,11 @@
 			<result name="exist" type="tiles">viewvoterid</result>
 			<result name="nLoggedIn" type="tiles">login</result>
 		</action>
+		<action name="verifyVoterIdStatus" class="verifyVoterIdStatusAction">
+			<result name="view" type="tiles">viewVerifyVoterId</result>
+			<result name="nLoggedIn" type="tiles">login</result>
+			<result name="error" type="tiles">error</result>
+		</action>
 		<action name="login" class="processAction">
 			<result name="nLoggedIn" type="tiles">login</result>
 			<result name="loggedIn" type="tiles">postLoginHome</result>
@@ -50,13 +55,14 @@
 		</action>
 		<action name="verifyVoterIdWardUser" class="viewVerifyVoterId">
 			<result name="view" type="tiles">viewVerifyVoterId</result>
-			<result name="noAuthority" type="tiles">error</result>
+			<result name="error" type="tiles">error</result>
 			<result name="nLoggedIn" type="tiles">login</result>
 		</action>
 		<action name="requestForVoterIdWardUser" class="requestForVoterIdWardUserAction">
 			<result name="view" type="tiles">warduservoteridrequest</result>
 			<result name="noAuthority" type="tiles">error</result>
 			<result name="nLoggedIn" type="tiles">login</result>
+			<result name="error" type="tiles">error</result>
 		</action>
 		<action name="regVoterId" class="voterIdAction">
 			<interceptor-ref name="fileUpload">

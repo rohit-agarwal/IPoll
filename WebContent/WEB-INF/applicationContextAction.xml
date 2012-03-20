@@ -9,7 +9,11 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 			<ref bean="loginServ"/>
 		</property>
 	</bean>
-	
+	<bean id="verifyVoterIdStatusAction" class="action.VoterIdStatusAction" scope="prototype" >
+		<property name="serv" >
+			<ref bean="RegVoterIdServ"/>
+		</property>
+	</bean>
 	<bean id="viewVerifyVoterId" class="action.veiwVerifyVoterIdAction" scope="prototype">
 		<property name="serv" >
 			<ref bean="RegVoterIdServ"/>

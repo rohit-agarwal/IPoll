@@ -4,11 +4,14 @@
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="dao">
   <class name="Blog">
-  	<id name="blog_id" type="string" column="blog_id">
+  	<id name="blog_id" type="string" column="blogid">
   		<generator class="uuid" />
   	</id>
   	<property name="title" column="title" not-null="true" type="string" />
   	<property name="post" column="post" not-null="true" type="string" />
+  	<property name="user" column="user" not-null="true" type="string" />
   	<property name="date" column="date" not-null="true" type="timestamp" />
+  	<property name="views" column="views" not-null="true" type="long" />
+  	<property name="visibility" column="visibility" not-null="true" type="integer"></property>
   </class>
 </hibernate-mapping>
